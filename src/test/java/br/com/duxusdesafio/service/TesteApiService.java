@@ -22,6 +22,7 @@ public class TesteApiService {
     private final static LocalDate data1993 = LocalDate.of(1993,1, 1);
     private final static LocalDate data1994 = LocalDate.of(1994,1, 1);
     private final static LocalDate data1995 = LocalDate.of(1995,1, 1);
+    private final static LocalDate data2000 = LocalDate.of(2000, 1, 1); //Parametro de teste para data que não existe na lista de times
 
     @Spy
     private ApiService apiService;
@@ -38,6 +39,7 @@ public class TesteApiService {
         DadosParaTesteApiService dadosParaTesteApiService = new DadosParaTesteApiService();
 
         List<Time> todosOsTimes = dadosParaTesteApiService.getTodosOsTimes();
+        List<Time> listaVazia = new ArrayList<>(); //Parametro de teste para lista de times vazia
 
         Time timeChicagoBullsDe1995 = dadosParaTesteApiService.getTimeChicagoBullsDe1995();
         Time timeDetroidPistonsDe1993 = dadosParaTesteApiService.getTimeDetroidPistonsDe1993();
@@ -52,6 +54,18 @@ public class TesteApiService {
                         data1993,
                         todosOsTimes,
                         timeDetroidPistonsDe1993
+                },
+                //Parametro de teste para data que não existe na lista de times
+                {
+                        data2000,
+                        todosOsTimes,
+                        null
+                },
+                //Parametro de teste para lista de times vazia
+                {
+                        data1995,
+                        listaVazia,
+                        null
                 }
         };
     }
