@@ -79,8 +79,6 @@ public class TesteApiService {
         assertEquals(esperado, timeRetornado);
     }
 
-
-
     @DataProvider
     public static Object[][] testIntegranteMaisUsadoParams() {
 
@@ -134,7 +132,6 @@ public class TesteApiService {
         };
     }
 
-
     @Test
     @UseDataProvider("testIntegranteMaisUsadoParams")
     public void testIntegranteMaisUsado(LocalDate dataInicial, LocalDate dataFinal, List<Time> todosOsTimes, Integrante esperado) {
@@ -143,8 +140,6 @@ public class TesteApiService {
 
         assertEquals(esperado, integranteRetornado);
     }
-
-
 
     @DataProvider
     public static Object[][] testTimeMaisRecorrenteParams() {
@@ -162,7 +157,42 @@ public class TesteApiService {
                         data1995,
                         todosOsTimes,
                         integrantesEsperados
-                }
+                },
+                //Teste data INICIO null
+                {
+                        null,
+                        data1995,
+                        todosOsTimes,
+                        integrantesEsperados
+                },
+                //Teste data FIM null
+                {
+                        data1993,
+                        null,
+                        todosOsTimes,
+                        integrantesEsperados
+                },
+                //Teste data INICIO e FIM null
+                {
+                        null,
+                        null,
+                        todosOsTimes,
+                        integrantesEsperados
+                },
+                //Teste data INICIO > FIM
+                {
+                        data1995,
+                        data1993,
+                        todosOsTimes,
+                        null
+                },
+                //Teste lista de times vazia
+                {
+                        data1993,
+                        data1995,
+                        new ArrayList<>(),
+                        null
+                },
         };
     }
 
