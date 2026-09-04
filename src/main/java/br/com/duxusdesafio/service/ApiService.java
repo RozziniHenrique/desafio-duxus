@@ -1,10 +1,12 @@
 package br.com.duxusdesafio.service;
 
+import br.com.duxusdesafio.model.ComposicaoTime;
 import br.com.duxusdesafio.model.Integrante;
 import br.com.duxusdesafio.model.Time;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +39,49 @@ public class ApiService {
      * dentro do período
      */
     public Integrante integranteMaisUsado(LocalDate dataInicial, LocalDate dataFinal, List<Time> todosOsTimes){
-        // TODO Implementar método seguindo as instruções!
-        return null;
+        HashMap<Integrante, Integer> contagemIntegrantes = new HashMap<>();
+
+        for (Time time : todosOsTimes) {
+
+            boolean dentroDoPeriodo = false;
+
+                //dataInicial e dataFinal null = todas as datas são consideradas
+                if (dataInicial == null && dataFinal == null) {
+                    dentroDoPeriodo = true;
+                }
+
+                //dataFinal null = todas as datas a partir da dataInicial são consideradas
+                else if (dataFinal == null && !time.getData().isBefore(dataInicial)) {
+                    dentroDoPeriodo = true;
+                }
+
+                //dataInicial null = todas as datas até a dataFinal são consideradas
+                else if (dataInicial == null && !time.getData().isAfter(dataFinal)) {
+                    dentroDoPeriodo = true;
+                }
+
+                //dataInicial e dataFinal não null = todas as datas entre a dataInicial e a dataFinal são consideradas
+                else if (!time.getData().isBefore(dataInicial) && !time.getData().isAfter(dataFinal)) {
+                    dentroDoPeriodo = true;
+                }
+
+            if(dentroDoPeriodo) {
+                for (ComposicaoTime composicao : time.getComposicaoTime()) {
+                    Integrante integrante = composicao.getIntegrante();
+                    contagemIntegrantes.put(integrante, contagemIntegrantes.getOrDefault(integrante, 0) + 1);
+                }
+            }
+        }
+
+        Integrante integranteMaisUsado = null;
+        int maiorContagem = 0;
+        for (Map.Entry<Integrante, Integer> entry : contagemIntegrantes.entrySet()) {
+            if (entry.getValue() > maiorContagem) {
+                maiorContagem = entry.getValue();
+                integranteMaisUsado = entry.getKey();
+            }
+        }
+        return integranteMaisUsado;
     }
 
     /**

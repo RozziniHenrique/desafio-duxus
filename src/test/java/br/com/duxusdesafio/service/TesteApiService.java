@@ -87,6 +87,7 @@ public class TesteApiService {
         DadosParaTesteApiService dadosParaTesteApiService = new DadosParaTesteApiService();
 
         List<Time> todosOsTimes = dadosParaTesteApiService.getTodosOsTimes();
+        List<Time> listaVazia = new ArrayList<>(); //Parametro de teste para lista de times vazia
 
         return new Object[][]{
                 {
@@ -94,7 +95,42 @@ public class TesteApiService {
                         data1995,
                         todosOsTimes,
                         dadosParaTesteApiService.getDenis_rodman()
-                }
+                },
+                //Teste data INICIO null
+                {
+                        null,
+                        data1995,
+                        todosOsTimes,
+                        dadosParaTesteApiService.getDenis_rodman()
+                },
+                //Teste data FIM null
+                {
+                        data1993,
+                        null,
+                        todosOsTimes,
+                        dadosParaTesteApiService.getDenis_rodman()
+                },
+                //Teste data INICIO e FIM null
+                {
+                        null,
+                        null,
+                        todosOsTimes,
+                        dadosParaTesteApiService.getDenis_rodman()
+                },
+                //Teste data INICIO > FIM
+                {
+                        data1995,
+                        data1993,
+                        todosOsTimes,
+                        null
+                },
+                //Teste lista de times vazia
+                {
+                        data2000,
+                        data2000,
+                        listaVazia,
+                        null
+                },
         };
     }
 
