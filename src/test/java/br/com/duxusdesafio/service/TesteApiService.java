@@ -209,8 +209,6 @@ public class TesteApiService {
         assertEquals(esperado, nomeDosIntegrantesDoTimeMaisRecorrente);
     }
 
-
-
     @DataProvider
     public static Object[][] testFuncaoMaisRecorrenteParams() {
 
@@ -282,7 +280,42 @@ public class TesteApiService {
                         data1995,
                         todosOsTimes,
                         dadosParaTesteApiService.getClubeChicagoBulls()
-                }
+                },
+                //Teste data INICIO null
+                {
+                        null,
+                        data1995,
+                        todosOsTimes,
+                        dadosParaTesteApiService.getClubeChicagoBulls()
+                },
+                //Teste data FIM null
+                {
+                        data1993,
+                        null,
+                        todosOsTimes,
+                        dadosParaTesteApiService.getClubeChicagoBulls()
+                },
+                //Teste data INICIO e FIM null
+                {
+                        null,
+                        null,
+                        todosOsTimes,
+                        dadosParaTesteApiService.getClubeChicagoBulls()
+                },
+                //Teste data INICIO > FIM
+                {
+                        data1995,
+                        data1993,
+                        todosOsTimes,
+                        null
+                },
+                //Teste periodo isolado - apenas 1993
+                {
+                        data1993,
+                        data1993,
+                        todosOsTimes,
+                        dadosParaTesteApiService.getClubeDetroitPistons()
+                },
         };
     }
 

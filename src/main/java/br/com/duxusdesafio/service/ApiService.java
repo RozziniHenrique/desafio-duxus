@@ -157,7 +157,7 @@ public class ApiService {
                 contagemFuncoes.getOrDefault(funcao, 0) + 1
             );
         }
-        
+
         String funcaoMaisRecorrente = null;
         int maiorContagem = 0;
 
@@ -174,8 +174,24 @@ public class ApiService {
      * Vai retornar o nome do Clube mais comum dentro do período
      */
     public String clubeMaisRecorrente(LocalDate dataInicial, LocalDate dataFinal, List<Time> todosOsTimes) {
-        // TODO Implementar método seguindo as instruções!
-        return null;
+        HashMap<String, Integer> contagemClubes = new HashMap<>();
+        for (Time time : todosOsTimes) {
+            if (estaDentroDoPeriodo(time.getData(), dataInicial, dataFinal)){
+                String clube = time.getNomeDoClube();
+                contagemClubes.put(clube, contagemClubes.getOrDefault(clube, 0) + 1);
+            }
+        }
+
+        String clubeMaisRecorrente = null;
+        int maiorContagem = 0;
+        
+        for (Map.Entry<String, Integer> entry : contagemClubes.entrySet()){
+            if (entry.getValue() > maiorContagem) {
+                maiorContagem = entry.getValue();
+                clubeMaisRecorrente = entry.getKey();
+            }
+        }
+        return clubeMaisRecorrente;
     }
 
 
