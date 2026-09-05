@@ -340,6 +340,8 @@ public class TesteApiService {
         Map<String, Long> esperado2 = new HashMap<>();
         esperado2.put(dadosParaTesteApiService.getClubeChicagoBulls(), 2L);
 
+        Map<String, Long> esperadoVazio = new HashMap<>();
+
         return new Object[][]{
                 {
                         data1993,
@@ -352,7 +354,36 @@ public class TesteApiService {
                         data1995,
                         todosOsTimes,
                         esperado2
-                }
+                },
+                //Teste data INICIO null
+                {
+                        null,
+                        data1995,
+                        todosOsTimes,
+                        esperado1
+                },
+                //Teste data FIM null
+                {
+                        data1993,
+                        null,
+                        todosOsTimes,
+                        esperado1
+                },
+                //Teste data INICIO e FIM null
+                {
+                        null,
+                        null,
+                        todosOsTimes,
+                        esperado1
+                },
+                //Teste data INICIO > FIM
+                {
+                        data1995,
+                        data1993,
+                        todosOsTimes,
+                        esperadoVazio
+                },
+                
         };
     }
 

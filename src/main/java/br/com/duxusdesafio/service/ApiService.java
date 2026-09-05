@@ -199,8 +199,14 @@ public class ApiService {
      * Vai retornar o número (quantidade) de aparições de cada Clube participante no período
      */
     public Map<String, Long> contagemDeClubesNoPeriodo(LocalDate dataInicial, LocalDate dataFinal, List<Time> todosOsTimes){
-        // TODO Implementar método seguindo as instruções!
-        return null;
+        Map<String, Long> contagemClubes = new HashMap<>();
+        for (Time time : todosOsTimes) {
+            if (estaDentroDoPeriodo(time.getData(), dataInicial, dataFinal)) {
+                String clube = time.getNomeDoClube();
+                contagemClubes.put(clube, contagemClubes.getOrDefault(clube, 0L) + 1);
+            }
+        }
+        return contagemClubes;
     }
 
     /**
