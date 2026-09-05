@@ -25,6 +25,23 @@ import java.util.Set;
 @Service
 public class ApiService {
 
+    // Validação de período de datas, para verificar se a data do time está dentro do período informado
+    private boolean estaDentroDoPeriodo(LocalDate data, LocalDate dataInicial, LocalDate dataFinal) {
+        boolean dentroDoPeriodo = false;
+
+        if (dataInicial == null && dataFinal == null) {
+            dentroDoPeriodo = true;
+        } else if (dataFinal == null && !data.isBefore(dataInicial)) {
+            dentroDoPeriodo = true;
+        } else if (dataInicial == null && !data.isAfter(dataFinal)) {
+            dentroDoPeriodo = true;
+        } else if (!data.isBefore(dataInicial) && !data.isAfter(dataFinal)) {
+            dentroDoPeriodo = true;
+        }
+
+        return dentroDoPeriodo;
+    }
+
     /**
      * Vai retornar um Time, com a composição do time daquela data
      */
@@ -45,30 +62,7 @@ public class ApiService {
         HashMap<Integrante, Integer> contagemIntegrantes = new HashMap<>();
 
         for (Time time : todosOsTimes) {
-
-            boolean dentroDoPeriodo = false;
-
-                //dataInicial e dataFinal null = todas as datas são consideradas
-                if (dataInicial == null && dataFinal == null) {
-                    dentroDoPeriodo = true;
-                }
-
-                //dataFinal null = todas as datas a partir da dataInicial são consideradas
-                else if (dataFinal == null && !time.getData().isBefore(dataInicial)) {
-                    dentroDoPeriodo = true;
-                }
-
-                //dataInicial null = todas as datas até a dataFinal são consideradas
-                else if (dataInicial == null && !time.getData().isAfter(dataFinal)) {
-                    dentroDoPeriodo = true;
-                }
-
-                //dataInicial e dataFinal não null = todas as datas entre a dataInicial e a dataFinal são consideradas
-                else if (!time.getData().isBefore(dataInicial) && !time.getData().isAfter(dataFinal)) {
-                    dentroDoPeriodo = true;
-                }
-
-            if(dentroDoPeriodo) {
+            if(estaDentroDoPeriodo(time.getData(), dataInicial, dataFinal)) {
                 for (ComposicaoTime composicao : time.getComposicaoTime()) {
                     Integrante integrante = composicao.getIntegrante();
                     contagemIntegrantes.put(integrante, contagemIntegrantes.getOrDefault(integrante, 0) + 1);
@@ -96,21 +90,7 @@ public class ApiService {
     HashMap<String, HashMap<Set<String>, Integer>> contagemTimes = new HashMap<>();
 
     for (Time time : todosOsTimes) {
-
-        boolean dentroDoPeriodo = false;
-
-        if (dataInicial == null && dataFinal == null) {
-            dentroDoPeriodo = true;
-        } else if (dataFinal == null && !time.getData().isBefore(dataInicial)) {
-            dentroDoPeriodo = true;
-        } else if (dataInicial == null && !time.getData().isAfter(dataFinal)) {
-            dentroDoPeriodo = true;
-        } else if (!time.getData().isBefore(dataInicial)
-                && !time.getData().isAfter(dataFinal)) {
-            dentroDoPeriodo = true;
-        }
-
-        if (dentroDoPeriodo) {
+        if (estaDentroDoPeriodo(time.getData(), dataInicial, dataFinal)) {
 
             Set<String> integrantes = new HashSet<>();
 
