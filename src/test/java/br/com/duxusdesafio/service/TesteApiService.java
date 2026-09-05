@@ -151,6 +151,10 @@ public class TesteApiService {
                 dadosParaTesteApiService.getMichael_jordan().getNome(),
                 dadosParaTesteApiService.getScottie_pippen().getNome()
         );
+
+        List<String> integrantesEsperados1993 = Arrays.asList(
+        dadosParaTesteApiService.getDenis_rodman().getNome()
+);
         return new Object[][]{
                 {
                         data1993,
@@ -161,9 +165,9 @@ public class TesteApiService {
                 //Teste data INICIO null
                 {
                         null,
-                        data1995,
+                        data1993,
                         todosOsTimes,
-                        integrantesEsperados
+                        integrantesEsperados1993
                 },
                 //Teste data FIM null
                 {
@@ -225,13 +229,13 @@ public class TesteApiService {
                 //Teste data INICIO null
                 {
                         null,
-                        data1995,
+                        data1993,
                         todosOsTimes,
-                        "ala"
+                        "ala-pivô"
                 },
                 //Teste data FIM null
                 {
-                        data1993,
+                        data1995,
                         null,
                         todosOsTimes,
                         "ala"
@@ -284,13 +288,13 @@ public class TesteApiService {
                 //Teste data INICIO null
                 {
                         null,
-                        data1995,
+                        data1993,
                         todosOsTimes,
-                        dadosParaTesteApiService.getClubeChicagoBulls()
+                        dadosParaTesteApiService.getClubeDetroitPistons()
                 },
                 //Teste data FIM null
                 {
-                        data1993,
+                        data1995,
                         null,
                         todosOsTimes,
                         dadosParaTesteApiService.getClubeChicagoBulls()
@@ -342,6 +346,13 @@ public class TesteApiService {
 
         Map<String, Long> esperadoVazio = new HashMap<>();
 
+        Map<String, Long> esperadoSomente1993 = new HashMap<>();
+        esperadoSomente1993.put(dadosParaTesteApiService.getClubeDetroitPistons(),1L
+        );
+        Map<String, Long> esperadoSomente1995 = new HashMap<>();
+        esperadoSomente1995.put(dadosParaTesteApiService.getClubeChicagoBulls(),1L
+        );
+
         return new Object[][]{
                 {
                         data1993,
@@ -358,16 +369,16 @@ public class TesteApiService {
                 //Teste data INICIO null
                 {
                         null,
-                        data1995,
+                        data1993,
                         todosOsTimes,
-                        esperado1
+                        esperadoSomente1993
                 },
                 //Teste data FIM null
                 {
-                        data1993,
+                        data1995,
                         null,
                         todosOsTimes,
-                        esperado1
+                        esperadoSomente1995
                 },
                 //Teste data INICIO e FIM null
                 {
@@ -409,6 +420,9 @@ public class TesteApiService {
 
         Map<String, Long> esperadoVazio = new HashMap<>();
 
+        Map<String, Long> esperadoSomente1993 = new HashMap<>();
+        esperadoSomente1993.put("ala-pivô", 1L);
+
         return new Object[][]{
                 {
                         data1993,
@@ -419,13 +433,13 @@ public class TesteApiService {
                 //Teste data INICIO null
                 {
                         null,
-                        data1995,
+                        data1993,
                         todosOsTimes,
-                        esperado
+                        esperadoSomente1993
                 },
                 //Teste data FIM null
                 {
-                        data1993,
+                        data1995,
                         null,
                         todosOsTimes,
                         esperado
