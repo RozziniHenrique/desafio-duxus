@@ -26,20 +26,24 @@ import java.util.Set;
 public class ApiService {
 
     // Validação de período de datas, para verificar se a data do time está dentro do período informado
-    private boolean estaDentroDoPeriodo(LocalDate data, LocalDate dataInicial, LocalDate dataFinal) {
-        boolean dentroDoPeriodo = false;
+    private boolean estaDentroDoPeriodo(
+            LocalDate data,
+            LocalDate dataInicial,
+            LocalDate dataFinal) {
 
         if (dataInicial == null && dataFinal == null) {
-            dentroDoPeriodo = true;
-        } else if (dataFinal == null && !data.isBefore(dataInicial)) {
-            dentroDoPeriodo = true;
-        } else if (dataInicial == null && !data.isAfter(dataFinal)) {
-            dentroDoPeriodo = true;
-        } else if (!data.isBefore(dataInicial) && !data.isAfter(dataFinal)) {
-            dentroDoPeriodo = true;
+            return true;
         }
 
-        return dentroDoPeriodo;
+        if (dataInicial == null) {
+            return !data.isAfter(dataFinal);
+        }
+
+        if (dataFinal == null) {
+            return !data.isBefore(dataInicial);
+        }
+
+        return !data.isBefore(dataInicial) && !data.isAfter(dataFinal);
     }
 
     /**
