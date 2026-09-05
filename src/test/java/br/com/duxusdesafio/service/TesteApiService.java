@@ -407,13 +407,43 @@ public class TesteApiService {
         esperado.put("ala", 2L);
         esperado.put("ala-pivô", 1L);
 
+        Map<String, Long> esperadoVazio = new HashMap<>();
+
         return new Object[][]{
                 {
                         data1993,
                         data1995,
                         todosOsTimes,
                         esperado
-                }
+                },
+                //Teste data INICIO null
+                {
+                        null,
+                        data1995,
+                        todosOsTimes,
+                        esperado
+                },
+                //Teste data FIM null
+                {
+                        data1993,
+                        null,
+                        todosOsTimes,
+                        esperado
+                },
+                //Teste data INICIO e FIM null
+                {
+                        null,
+                        null,
+                        todosOsTimes,
+                        esperado
+                },
+                //Teste data INICIO > FIM
+                {
+                        data1995,
+                        data1993,
+                        todosOsTimes,
+                        esperadoVazio
+                },
         };
     }
 

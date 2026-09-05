@@ -194,7 +194,6 @@ public class ApiService {
         return clubeMaisRecorrente;
     }
 
-
     /**
      * Vai retornar o número (quantidade) de aparições de cada Clube participante no período
      */
@@ -214,8 +213,21 @@ public class ApiService {
      * Dica - pense sobre repetições!
      */
     public Map<String, Long> contagemPorFuncao(LocalDate dataInicial, LocalDate dataFinal, List<Time> todosOsTimes){
-        // TODO Implementar método seguindo as instruções!
-        return null;
+        Set<Integrante> integrantesUnicos = new HashSet<>();
+        Map<String, Long> contagemFuncoes = new HashMap<>();
+        for (Time time : todosOsTimes) {
+            if (estaDentroDoPeriodo(time.getData(), dataInicial, dataFinal)) {
+                for (ComposicaoTime composicao : time.getComposicaoTime()) {
+                    Integrante integrante = composicao.getIntegrante();
+                    if (!integrantesUnicos.contains(integrante)) {
+                        integrantesUnicos.add(integrante);
+                        String funcao = integrante.getFuncao();
+                        contagemFuncoes.put(funcao, contagemFuncoes.getOrDefault(funcao, 0L) + 1);
+                    }
+                }
+            }
+        }
+        return contagemFuncoes;
     }
 
 }
