@@ -134,8 +134,40 @@ public class ApiService {
      * Vai retornar a função mais recorrente nos times dentro do período
      */
     public String funcaoMaisRecorrente(LocalDate dataInicial, LocalDate dataFinal, List<Time> todosOsTimes){
-        // TODO Implementar método seguindo as instruções!
-        return null;
+        Set<Integrante> integrantesUnicos = new HashSet<>();
+
+        for (Time time : todosOsTimes) {
+
+            if (estaDentroDoPeriodo(time.getData(), dataInicial, dataFinal)) {
+
+                for (ComposicaoTime composicao : time.getComposicaoTime()) {
+
+                    integrantesUnicos.add(composicao.getIntegrante());
+                }
+            }
+        }
+        HashMap<String, Integer> contagemFuncoes = new HashMap<>();
+
+        for (Integrante integrante : integrantesUnicos) {
+
+            String funcao = integrante.getFuncao();
+
+            contagemFuncoes.put(
+                funcao,
+                contagemFuncoes.getOrDefault(funcao, 0) + 1
+            );
+        }
+        
+        String funcaoMaisRecorrente = null;
+        int maiorContagem = 0;
+
+        for (Map.Entry<String, Integer> entry : contagemFuncoes.entrySet()) {
+            if (entry.getValue() > maiorContagem) {
+                maiorContagem = entry.getValue();
+                funcaoMaisRecorrente = entry.getKey();
+            }
+        }
+        return funcaoMaisRecorrente;
     }
 
     /**

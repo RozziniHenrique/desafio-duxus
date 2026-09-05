@@ -223,7 +223,42 @@ public class TesteApiService {
                         data1995,
                         todosOsTimes,
                         "ala"
-                }
+                },
+                //Teste data INICIO null
+                {
+                        null,
+                        data1995,
+                        todosOsTimes,
+                        "ala"
+                },
+                //Teste data FIM null
+                {
+                        data1993,
+                        null,
+                        todosOsTimes,
+                        "ala"
+                },
+                //Teste data INICIO e FIM null
+                {
+                        null,
+                        null,
+                        todosOsTimes,
+                        "ala"
+                },
+                //Teste data INICIO > FIM
+                {
+                        data1995,
+                        data1993,
+                        todosOsTimes,
+                        null
+                },
+                //Teste lista de times vazia
+                {
+                        data1993,
+                        data1995,
+                        new ArrayList<>(),
+                        null
+                },
         };
     }
 
