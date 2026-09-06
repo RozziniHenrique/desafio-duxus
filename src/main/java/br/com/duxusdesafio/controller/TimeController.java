@@ -30,6 +30,13 @@ public class TimeController {
 
     @PostMapping
     public ResponseEntity<Time> cadastrarTime(@RequestBody TimeCadastroRequest time){
+
+        for (Long integranteId : time.getIntegrantesIds()){
+            if (!integranteRepository.existsById(integranteId)) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+
         Time novoTime = new Time();
         novoTime.setNomeDoClube(time.getNomeDoClube());
         novoTime.setData(time.getData());
@@ -37,11 +44,7 @@ public class TimeController {
 
         for (Long integranteId : time.getIntegrantesIds()){
             Integrante integrante = integranteRepository.findById(integranteId).orElse(null);
-
-            if (integrante == null) {
-                continue;
-            }
-
+            
             ComposicaoTime composicaoTime = new ComposicaoTime();
             composicaoTime.setTime(novoTime);
             composicaoTime.setIntegrante(integrante);
