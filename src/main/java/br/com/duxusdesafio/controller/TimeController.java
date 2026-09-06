@@ -1,5 +1,9 @@
 package br.com.duxusdesafio.controller;
 
+import br.com.duxusdesafio.service.ApiService;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +35,16 @@ public class TimeController {
     @PostMapping
     public ResponseEntity<Time> cadastrarTime(@RequestBody TimeCadastroRequest time){
 
+        if (time.getIntegrantesIds() == null || time.getIntegrantesIds().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Set<Long> idsUnicos = new HashSet<>(time.getIntegrantesIds());
+
+        if(idsUnicos.size() != time.getIntegrantesIds().size()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         for (Long integranteId : time.getIntegrantesIds()){
             if (!integranteRepository.existsById(integranteId)) {
                 return ResponseEntity.badRequest().build();
@@ -44,7 +58,7 @@ public class TimeController {
 
         for (Long integranteId : time.getIntegrantesIds()){
             Integrante integrante = integranteRepository.findById(integranteId).orElse(null);
-            
+
             ComposicaoTime composicaoTime = new ComposicaoTime();
             composicaoTime.setTime(novoTime);
             composicaoTime.setIntegrante(integrante);
