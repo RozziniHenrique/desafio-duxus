@@ -2,6 +2,9 @@ package br.com.duxusdesafio.model;
 
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 
 
@@ -13,7 +16,8 @@ public class ComposicaoTime {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne	
 	private Time time;
 
 	@ManyToOne
