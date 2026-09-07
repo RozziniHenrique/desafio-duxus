@@ -1,9 +1,7 @@
 package br.com.duxusdesafio.repository;
 
+import br.com.duxusdesafio.model.ComposicaoTime;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.duxusdesafio.model.ComposicaoTime;
-
-public interface ComposicaoTimeRepository extends JpaRepository<ComposicaoTime, Long> {
-
-}
+public interface ComposicaoTimeRepository
+  extends JpaRepository<ComposicaoTime, Long> {}

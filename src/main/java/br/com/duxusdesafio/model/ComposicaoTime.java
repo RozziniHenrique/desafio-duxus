@@ -1,84 +1,82 @@
 package br.com.duxusdesafio.model;
 
-
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Objects;
-
+import javax.persistence.*;
 
 @Entity
 @Table(name = "composicao_time")
 public class ComposicaoTime {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
-	@JsonIgnore
-	@ManyToOne	
-	private Time time;
 
-	@ManyToOne
-	private Integrante integrante;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-	public ComposicaoTime() {
-	}
+  @JsonIgnore
+  @ManyToOne
+  private Time time;
 
-	public ComposicaoTime(Time time, Integrante integrante) {
-		this.time = time;
-		this.integrante = integrante;
-	}
+  @ManyToOne
+  private Integrante integrante;
 
-    public ComposicaoTime(long id, Time time, Integrante integrante) {
-        this.id = id;
-        this.time = time;
-        this.integrante = integrante;
-    }
+  public ComposicaoTime() {}
 
-	public long getId() {
-		return id;
-	}
+  public ComposicaoTime(Time time, Integrante integrante) {
+    this.time = time;
+    this.integrante = integrante;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public ComposicaoTime(long id, Time time, Integrante integrante) {
+    this.id = id;
+    this.time = time;
+    this.integrante = integrante;
+  }
 
-	public Time getTime() {
-		return time;
-	}
+  public long getId() {
+    return id;
+  }
 
-	public void setTime(Time time) {
-		this.time = time;
-	}
+  public void setId(long id) {
+    this.id = id;
+  }
 
-	public Integrante getIntegrante() {
-		return integrante;
-	}
+  public Time getTime() {
+    return time;
+  }
 
-	public void setIntegrante(Integrante integrante) {
-		this.integrante = integrante;
-	}
+  public void setTime(Time time) {
+    this.time = time;
+  }
 
-	@Override
-	public final boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof ComposicaoTime)) return false;
-		ComposicaoTime that = (ComposicaoTime) o;
-		return id == that.id && Objects.equals(time, that.time) && Objects.equals(integrante, that.integrante);
-	}
+  public Integrante getIntegrante() {
+    return integrante;
+  }
 
-	@Override
-	public final int hashCode() {
-		return Objects.hash(id, time, integrante);
-	}
+  public void setIntegrante(Integrante integrante) {
+    this.integrante = integrante;
+  }
 
-	@Override
-	public String toString() {
-		return "ComposicaoTime{" +
-				"time=" + time +
-				", integrante=" + integrante +
-				'}';
-	}
+  @Override
+  public final boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ComposicaoTime)) return false;
+    ComposicaoTime that = (ComposicaoTime) o;
+    return (
+      id == that.id &&
+      Objects.equals(time, that.time) &&
+      Objects.equals(integrante, that.integrante)
+    );
+  }
+
+  @Override
+  public final int hashCode() {
+    return Objects.hash(id, time, integrante);
+  }
+
+  @Override
+  public String toString() {
+    return (
+      "ComposicaoTime{" + "time=" + time + ", integrante=" + integrante + '}'
+    );
+  }
 }

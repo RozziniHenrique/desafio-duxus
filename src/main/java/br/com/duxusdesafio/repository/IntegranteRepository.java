@@ -1,8 +1,6 @@
 package br.com.duxusdesafio.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.duxusdesafio.model.Integrante;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IntegranteRepository extends JpaRepository<Integrante, Long> {
-    
-}
+public interface IntegranteRepository extends JpaRepository<Integrante, Long> {}

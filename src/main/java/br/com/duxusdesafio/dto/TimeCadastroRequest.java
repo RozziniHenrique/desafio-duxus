@@ -4,34 +4,35 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class TimeCadastroRequest {
-    
-    private String nomeDoClube;
 
-    private LocalDate data;
+  private String nomeDoClube;
 
-    private List<Long> integrantesIds;
+  private LocalDate data;
 
-    //Getters and Setters
-    public String getNomeDoClube() {
-        return nomeDoClube;
-    }
-    void setNomeDoClube(String nomeDoClube) {
-        this.nomeDoClube = nomeDoClube;
-    }
+  private List<Long> integrantesIds;
 
-    public LocalDate getData() {
-        return data;
-    }
+  //Getters and Setters
+  public String getNomeDoClube() {
+    return nomeDoClube;
+  }
 
-    void setData(LocalDate data) {
-        this.data = data;
-    }
+  void setNomeDoClube(String nomeDoClube) {
+    this.nomeDoClube = nomeDoClube;
+  }
 
-    public List<Long> getIntegrantesIds() {
-        return integrantesIds;
-    }
-    void setIntegrantesIds(List<Long> integrantesIds) {
-        this.integrantesIds = integrantesIds;
-    }
-    
+  public LocalDate getData() {
+    return data;
+  }
+
+  void setData(LocalDate data) {
+    this.data = data;
+  }
+
+  public List<Long> getIntegrantesIds() {
+    return integrantesIds;
+  }
+
+  void setIntegrantesIds(List<Long> integrantesIds) {
+    this.integrantesIds = integrantesIds;
+  }
 }
