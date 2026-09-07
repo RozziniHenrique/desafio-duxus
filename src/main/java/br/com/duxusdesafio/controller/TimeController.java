@@ -1,19 +1,5 @@
 package br.com.duxusdesafio.controller;
 
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import br.com.duxusdesafio.dto.TimeCadastroRequest;
 import br.com.duxusdesafio.model.ComposicaoTime;
 import br.com.duxusdesafio.model.Integrante;
@@ -22,75 +8,167 @@ import br.com.duxusdesafio.repository.ComposicaoTimeRepository;
 import br.com.duxusdesafio.repository.IntegranteRepository;
 import br.com.duxusdesafio.repository.TimeRepository;
 import br.com.duxusdesafio.service.ApiService;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-
-@RestController 
+@RestController
 @RequestMapping("/times")
 public class TimeController {
 
-    private final TimeRepository timeRepository;
-    private final ComposicaoTimeRepository composicaoTimeRepository;
-    private final IntegranteRepository integranteRepository;
-    private final ApiService apiService;
+  private final TimeRepository timeRepository;
+  private final ComposicaoTimeRepository composicaoTimeRepository;
+  private final IntegranteRepository integranteRepository;
+  private final ApiService apiService;
 
-    public TimeController(TimeRepository timeRepository, ComposicaoTimeRepository composicaoTimeRepository, IntegranteRepository integranteRepository, ApiService apiService) {
-        this.timeRepository = timeRepository;
-        this.composicaoTimeRepository = composicaoTimeRepository;
-        this.integranteRepository = integranteRepository;
-        this.apiService = apiService;
+  public TimeController(
+    TimeRepository timeRepository,
+    ComposicaoTimeRepository composicaoTimeRepository,
+    IntegranteRepository integranteRepository,
+    ApiService apiService
+  ) {
+    this.timeRepository = timeRepository;
+    this.composicaoTimeRepository = composicaoTimeRepository;
+    this.integranteRepository = integranteRepository;
+    this.apiService = apiService;
+  }
+
+  @PostMapping
+  public ResponseEntity<Time> cadastrarTime(
+    @RequestBody TimeCadastroRequest time
+  ) {
+    if (
+      time.getIntegrantesIds() == null || time.getIntegrantesIds().isEmpty()
+    ) {
+      return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping
-    public ResponseEntity<Time> cadastrarTime(@RequestBody TimeCadastroRequest time){
+    Set<Long> idsUnicos = new HashSet<>(time.getIntegrantesIds());
 
-        if (time.getIntegrantesIds() == null || time.getIntegrantesIds().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+    if (idsUnicos.size() != time.getIntegrantesIds().size()) {
+      return ResponseEntity.badRequest().build();
+    }
 
-        Set<Long> idsUnicos = new HashSet<>(time.getIntegrantesIds());
+    for (Long integranteId : time.getIntegrantesIds()) {
+      if (!integranteRepository.existsById(integranteId)) {
+        return ResponseEntity.badRequest().build();
+      }
+    }
 
-        if(idsUnicos.size() != time.getIntegrantesIds().size()) {
-            return ResponseEntity.badRequest().build();
-        }
+    Time novoTime = new Time();
+    novoTime.setNomeDoClube(time.getNomeDoClube());
+    novoTime.setData(time.getData());
+    timeRepository.save(novoTime);
 
-        for (Long integranteId : time.getIntegrantesIds()){
-            if (!integranteRepository.existsById(integranteId)) {
-                return ResponseEntity.badRequest().build();
-            }
-        }
+    for (Long integranteId : time.getIntegrantesIds()) {
+      Integrante integrante = integranteRepository
+        .findById(integranteId)
+        .orElse(null);
 
-        Time novoTime = new Time();
-        novoTime.setNomeDoClube(time.getNomeDoClube());
-        novoTime.setData(time.getData());
-        timeRepository.save(novoTime);
+      ComposicaoTime composicaoTime = new ComposicaoTime();
+      composicaoTime.setTime(novoTime);
+      composicaoTime.setIntegrante(integrante);
 
-        for (Long integranteId : time.getIntegrantesIds()){
-            Integrante integrante = integranteRepository.findById(integranteId).orElse(null);
-
-            ComposicaoTime composicaoTime = new ComposicaoTime();
-            composicaoTime.setTime(novoTime);
-            composicaoTime.setIntegrante(integrante);
-
-            composicaoTimeRepository.save(composicaoTime);
-        }
+      composicaoTimeRepository.save(composicaoTime);
+    }
 
     return ResponseEntity.status(201).body(novoTime);
+  }
+
+  @GetMapping("/data/{data}")
+  public ResponseEntity<Time> buscarTimePorData(
+    @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data
+  ) {
+    List<Time> times = timeRepository.findAll();
+
+    Time timeEncontrado = apiService.timeDaData(data, times);
+
+    if (timeEncontrado != null) {
+      return ResponseEntity.ok(timeEncontrado);
     }
 
-    @GetMapping("/data/{data}")
-        public ResponseEntity<Time> buscarTimePorData(
-                @PathVariable
-                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                LocalDate data) {
+    return ResponseEntity.notFound().build();
+  }
 
-            List<Time> times = timeRepository.findAll();
+  @GetMapping("/integrante-mais-usado")
+  public ResponseEntity<Integrante> buscarIntegranteMaisUsado(
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataInicial,
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataFinal
+  ) {
+    List<Time> times = timeRepository.findAll();
 
-            Time timeEncontrado = apiService.timeDaData(data, times);
+    Integrante integranteMaisUsado = apiService.integranteMaisUsado(
+      dataInicial,
+      dataFinal,
+      times
+    );
 
-            if (timeEncontrado != null) {
-                return ResponseEntity.ok(timeEncontrado);
-            }
-
-            return ResponseEntity.notFound().build();
-        }
+    if (integranteMaisUsado != null) {
+      return ResponseEntity.ok(integranteMaisUsado);
     }
+
+    return ResponseEntity.notFound().build();
+  }
+
+  @GetMapping("/integrantes-do-time-mais-recorrente")
+  public ResponseEntity<List<String>> buscarIntegrantesDoTimeMaisRecorrente(
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataInicial,
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataFinal
+  ) {
+    List<Time> times = timeRepository.findAll();
+
+    List<String> integrante = apiService.integrantesDoTimeMaisRecorrente(
+      dataInicial,
+      dataFinal,
+      times
+    );
+
+    if (!integrante.isEmpty()) {
+      return ResponseEntity.ok(integrante);
+    }
+
+    return ResponseEntity.notFound().build();
+  }
+
+  @GetMapping("/funcao-mais-recorrente")
+  public ResponseEntity<String> buscarFuncaoMaisRecorrente(
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataInicial,
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataFinal
+  ) {
+    List<Time> times = timeRepository.findAll();
+
+    String funcaoMaisRecorrente = apiService.funcaoMaisRecorrente(
+      dataInicial,
+      dataFinal,
+      times
+    );
+
+    if (funcaoMaisRecorrente != null) {
+      return ResponseEntity.ok(funcaoMaisRecorrente);
+    }
+
+    return ResponseEntity.notFound().build();
+  }
+}
