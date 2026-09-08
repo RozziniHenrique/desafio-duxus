@@ -11,6 +11,7 @@ import br.com.duxusdesafio.service.ApiService;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -141,7 +142,7 @@ public class TimeController {
       times
     );
 
-    if (!integrante.isEmpty()) {
+    if (integrante != null && !integrante.isEmpty()) {
       return ResponseEntity.ok(integrante);
     }
 
@@ -167,6 +168,77 @@ public class TimeController {
 
     if (funcaoMaisRecorrente != null) {
       return ResponseEntity.ok(funcaoMaisRecorrente);
+    }
+
+    return ResponseEntity.notFound().build();
+  }
+
+  @GetMapping("/clube-mais-recorrente")
+  public ResponseEntity<String> buscarClubeMaisRecorrente(
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataInicial,
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataFinal
+  ) {
+    List<Time> times = timeRepository.findAll();
+    String clubeMaisRecorrente = apiService.clubeMaisRecorrente(
+      dataInicial,
+      dataFinal,
+      times
+    );
+
+    if (clubeMaisRecorrente != null) {
+      return ResponseEntity.ok(clubeMaisRecorrente);
+    }
+
+    return ResponseEntity.notFound().build();
+  }
+
+  @GetMapping("/contagem-de-clubes-no-periodo")
+  public ResponseEntity<Map<String, Long>> buscarContagemDeClubesNoPeriodo(
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataInicial,
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataFinal
+  ) {
+    List<Time> times = timeRepository.findAll();
+
+    Map<String, Long> contagem = apiService.contagemDeClubesNoPeriodo(
+      dataInicial,
+      dataFinal,
+      times
+    );
+
+    if (contagem != null) {
+      return ResponseEntity.ok(contagem);
+    }
+
+    return ResponseEntity.notFound().build();
+  }
+
+  @GetMapping("/contagem-por-funcao")
+  public ResponseEntity<Map<String, Long>> buscarContagemPorFuncao(
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataInicial,
+    @RequestParam(required = false) @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) LocalDate dataFinal
+  ) {
+    List<Time> times = timeRepository.findAll();
+
+    Map<String, Long> contagem = apiService.contagemPorFuncao(
+      dataInicial,
+      dataFinal,
+      times
+    );
+
+    if (contagem != null) {
+      return ResponseEntity.ok(contagem);
     }
 
     return ResponseEntity.notFound().build();
