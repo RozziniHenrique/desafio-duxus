@@ -49,7 +49,11 @@ public class TimeController {
     @RequestBody TimeCadastroRequest time
   ) {
     if (
-      time.getIntegrantesIds() == null || time.getIntegrantesIds().isEmpty()
+      time.getNomeDoClube() == null ||
+      time.getNomeDoClube().trim().isEmpty() ||
+      time.getData() == null ||
+      time.getIntegrantesIds() == null ||
+      time.getIntegrantesIds().isEmpty()
     ) {
       return ResponseEntity.badRequest().build();
     }
@@ -61,7 +65,9 @@ public class TimeController {
     }
 
     for (Long integranteId : time.getIntegrantesIds()) {
-      if (!integranteRepository.existsById(integranteId)) {
+      if (
+        integranteId == null || !integranteRepository.existsById(integranteId)
+      ) {
         return ResponseEntity.badRequest().build();
       }
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -14,11 +15,11 @@ public class Integrante {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @NotNull
+  @NotBlank
   @Column
   private String nome;
 
-  @NotNull
+  @NotBlank
   @Column
   private String funcao;
 

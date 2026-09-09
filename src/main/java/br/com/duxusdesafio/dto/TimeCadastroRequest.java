@@ -16,7 +16,7 @@ public class TimeCadastroRequest {
     return nomeDoClube;
   }
 
-  void setNomeDoClube(String nomeDoClube) {
+  public void setNomeDoClube(String nomeDoClube) {
     this.nomeDoClube = nomeDoClube;
   }
 
@@ -24,7 +24,7 @@ public class TimeCadastroRequest {
     return data;
   }
 
-  void setData(LocalDate data) {
+  public void setData(LocalDate data) {
     this.data = data;
   }
 
@@ -32,7 +32,7 @@ public class TimeCadastroRequest {
     return integrantesIds;
   }
 
-  void setIntegrantesIds(List<Long> integrantesIds) {
+  public void setIntegrantesIds(List<Long> integrantesIds) {
     this.integrantesIds = integrantesIds;
   }
 }

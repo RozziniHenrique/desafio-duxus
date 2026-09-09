@@ -2,6 +2,7 @@ package br.com.duxusdesafio.controller;
 
 import br.com.duxusdesafio.model.Integrante;
 import br.com.duxusdesafio.repository.IntegranteRepository;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,9 +19,8 @@ public class IntegranteController {
     this.integranteRepository = integranteRepository;
   }
 
-  @PostMapping
   public ResponseEntity<Integrante> cadastrarIntegrante(
-    @RequestBody Integrante integrante
+    @Valid @RequestBody Integrante integrante
   ) {
     Integrante novoIntegrante = integranteRepository.save(integrante);
     return ResponseEntity.status(201).body(novoIntegrante);
