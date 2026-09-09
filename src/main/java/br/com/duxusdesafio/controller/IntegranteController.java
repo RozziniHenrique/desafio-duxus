@@ -19,6 +19,7 @@ public class IntegranteController {
     this.integranteRepository = integranteRepository;
   }
 
+  @PostMapping
   public ResponseEntity<Integrante> cadastrarIntegrante(
     @Valid @RequestBody Integrante integrante
   ) {
